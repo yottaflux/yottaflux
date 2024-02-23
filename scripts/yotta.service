@@ -1,0 +1,12 @@
+[Unit]
+Description=Yottaflux Node
+
+[Service]
+ExecStart=/home/ubuntu/yottaflux/scripts/run_yottad.sh
+TimeoutSec=3600
+Restart=always
+Type=simple
+
+
+[Install]
+WantedBy=default.target
