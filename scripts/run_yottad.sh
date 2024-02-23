@@ -31,15 +31,15 @@ echo Configuring yotta seed for IP $MY_IP , AZ $AZ , in region $REGION - $ENVIRO
 if [ -z "${ENVIRONMENT}" ]; then
   mkdir /root/.yottaflux
   cp scripts/yottaflux.conf /root/.yottaflux/yottaflux.conf
-  exec yottad -printtoconsole
+  exec yottafluxd -printtoconsole
 elif [ "${ENVIRONMENT}" == "dev" ]; then
   mkdir -p /root/.yottaflux/testnet7
   cp scripts/yottaflux_test.conf /root/.yottaflux/testnet7/yottaflux.conf
-  exec yottad -testnet -printtoconsole
+  exec yottafluxd -testnet -printtoconsole
 elif [ "${ENVIRONMENT}" == "prod" ]; then
   mkdir /root/.yottaflux
   cp scripts/yottaflux.conf /root/.yottaflux/yottaflux.conf
-  exec yottad -printtoconsole
+  exec yottafluxd -printtoconsole
 else
   echo "ERROR: ENVIRONMENT supplied but invalid."
 fi
