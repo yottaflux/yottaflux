@@ -4,8 +4,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef RAVEN_COINS_H
-#define RAVEN_COINS_H
+#ifndef YOTTAFLUX_COINS_H
+#define YOTTAFLUX_COINS_H
 
 #include "primitives/transaction.h"
 #include "compressor.h"
@@ -288,7 +288,7 @@ public:
     size_t DynamicMemoryUsage() const;
 
     /** 
-     * Amount of ravens coming in to a transaction
+     * Amount of yottafluxs coming in to a transaction
      * Note that lightweight clients may not know anything besides the hash of previous transactions,
      * so may not be able to calculate this.
      *
@@ -318,4 +318,4 @@ void AddCoins(CCoinsViewCache& cache, const CTransaction& tx, int nHeight, uint2
 // lookups to database, so it should be used with care.
 const Coin& AccessByTxid(const CCoinsViewCache& cache, const uint256& txid);
 
-#endif // RAVEN_COINS_H
+#endif // YOTTAFLUX_COINS_H

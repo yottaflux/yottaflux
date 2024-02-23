@@ -178,7 +178,7 @@ public:
         pchMessageStart[1] = 0x41; // A
         pchMessageStart[2] = 0x56; // V
         pchMessageStart[3] = 0x4e; // N
-        nDefaultPort = 8767;
+        nDefaultPort = 8559;
         nPruneAfterHeight = 100000;
 
         genesis = CreateGenesisBlock(1514999494, 25023712, 0x1e00ffff, 4, 5000 * COIN);
@@ -188,9 +188,9 @@ public:
         assert(consensus.hashGenesisBlock == uint256S("0000006b444bc2f2ffe627be9d9e7e7a0730000870ef6eb6da46c8eae389df90"));
         assert(genesis.hashMerkleRoot == uint256S("28ff00a867739a352523808d301f504bc4547699398d70faf2266a8bae5f3516"));
 
-        vSeeds.emplace_back("seed-raven.bitactivate.com", false);
-        vSeeds.emplace_back("seed-raven.ravencoin.com", false);
-        vSeeds.emplace_back("seed-raven.ravencoin.org", false);
+        vSeeds.emplace_back("seed-yottaflux.bitactivate.com", false);
+        vSeeds.emplace_back("seed-yottaflux.yottaflux.com", false);
+        vSeeds.emplace_back("seed-yottaflux.yottaflux.ai", false);
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,60);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,122);
@@ -198,7 +198,7 @@ public:
         base58Prefixes[EXT_PUBLIC_KEY] = {0x04, 0x88, 0xB2, 0x1E};
         base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x88, 0xAD, 0xE4};
 
-        // Raven BIP44 cointype in mainnet is '175'
+        // Yottaflux BIP44 cointype in mainnet is '175'
         nExtCoinType = 175;
 
         vFixedSeeds = std::vector<SeedSpec6>(pnSeed6_main, pnSeed6_main + ARRAYLEN(pnSeed6_main));
@@ -223,7 +223,7 @@ public:
 		// 20969961 transactions as of block #2383625 at 2022-07-28 22:02:22 (UTC)
 		// previously set at 6709969 txns by time 1577939273 ==>
         chainTxData = ChainTxData{
-            // Update as we know more about the contents of the Raven chain
+            // Update as we know more about the contents of the Yottaflux chain
             // Stats as of 0x00000000000016ec03d8d93f9751323bcc42137b1b4df67e6a11c4394fd8e5ad window size 43200
             1659045742, // * UNIX timestamp of last known number of transactions
             20969961,    // * total number of transactions between genesis and that timestamp
@@ -231,7 +231,7 @@ public:
             5.7       // * estimated number of transactions per second after that timestamp
         };
 
-        /** RVN Start **/
+        /** YAI Start **/
         // Burn Amounts
         nIssueAssetBurnAmount = 500 * COIN;
         nReissueAssetBurnAmount = 100 * COIN;
@@ -270,7 +270,7 @@ public:
 
         nKAAAWWWPOWActivationTime = 1588788000; // UTC: Wed May 06 2020 18:00:00
         nKAWPOWActivationTime = nKAAAWWWPOWActivationTime;
-        /** RVN End **/
+        /** YAI End **/
     }
 };
 
@@ -414,9 +414,9 @@ public:
         vFixedSeeds.clear();
         vSeeds.clear();
 
-        vSeeds.emplace_back("seed-testnet-raven.bitactivate.com", false);
-        vSeeds.emplace_back("seed-testnet-raven.ravencoin.com", false);
-        vSeeds.emplace_back("seed-testnet-raven.ravencoin.org", false);
+        vSeeds.emplace_back("seed-testnet-yottaflux.bitactivate.com", false);
+        vSeeds.emplace_back("seed-testnet-yottaflux.yottaflux.com", false);
+        vSeeds.emplace_back("seed-testnet-yottaflux.yottaflux.ai", false);
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,111);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,196);
@@ -424,7 +424,7 @@ public:
         base58Prefixes[EXT_PUBLIC_KEY] = {0x04, 0x35, 0x87, 0xCF};
         base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x35, 0x83, 0x94};
 
-        // Raven BIP44 cointype in testnet
+        // Yottaflux BIP44 cointype in testnet
         nExtCoinType = 1;
 
         vFixedSeeds = std::vector<SeedSpec6>(pnSeed6_test, pnSeed6_test + ARRAYLEN(pnSeed6_test));
@@ -444,7 +444,7 @@ public:
         };
 
         chainTxData = ChainTxData{
-            // Update as we know more about the contents of the Raven chain
+            // Update as we know more about the contents of the Yottaflux chain
             // Stats as of 00000023b66f46d74890287a7b1157dd780c7c5fdda2b561eb96684d2b39d62e window size 43200
             1543633332, // * UNIX timestamp of last known number of transactions
             146666,     // * total number of transactions between genesis and that timestamp
@@ -452,7 +452,7 @@ public:
             0.02        // * estimated number of transactions per second after that timestamp
         };
 
-        /** RVN Start **/
+        /** YAI Start **/
         // Burn Amounts
         nIssueAssetBurnAmount = 500 * COIN;
         nReissueAssetBurnAmount = 100 * COIN;
@@ -491,7 +491,7 @@ public:
 
         nKAAAWWWPOWActivationTime = 1585159200; //Wed Mar 25 2020 18:00:00 UTC
         nKAWPOWActivationTime = nKAAAWWWPOWActivationTime;
-        /** RVN End **/
+        /** YAI End **/
     }
 };
 
@@ -557,7 +557,7 @@ public:
         pchMessageStart[1] = 0x52; // R
         pchMessageStart[2] = 0x4F; // O
         pchMessageStart[3] = 0x57; // W
-        nDefaultPort = 18444;
+        nDefaultPort = 18560;
         nPruneAfterHeight = 1000;
 
 // This is used inorder to mine the genesis block. Once found, we can use the nonce and block hash found to create a valid genesis block
@@ -651,10 +651,10 @@ public:
         base58Prefixes[EXT_PUBLIC_KEY] = {0x04, 0x35, 0x87, 0xCF};
         base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x35, 0x83, 0x94};
 
-        // Raven BIP44 cointype in regtest
+        // Yottaflux BIP44 cointype in regtest
         nExtCoinType = 1;
 
-        /** RVN Start **/
+        /** YAI Start **/
         // Burn Amounts
         nIssueAssetBurnAmount = 500 * COIN;
         nReissueAssetBurnAmount = 100 * COIN;
@@ -696,7 +696,7 @@ public:
         // If you are looking to test the kawpow hashing function in regtest. You will need to change this number
         nKAAAWWWPOWActivationTime = 3582830167;
         nKAWPOWActivationTime = nKAAAWWWPOWActivationTime;
-        /** RVN End **/
+        /** YAI End **/
     }
 };
 

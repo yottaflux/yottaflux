@@ -5,7 +5,7 @@
 
 #include "qvalidatedlineedit.h"
 
-#include "ravenaddressvalidator.h"
+#include "yottafluxaddressvalidator.h"
 #include "guiconstants.h"
 #include "platformstyle.h"
 

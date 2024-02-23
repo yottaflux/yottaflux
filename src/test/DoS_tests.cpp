@@ -15,7 +15,7 @@
 #include "util.h"
 #include "validation.h"
 
-#include "test/test_raven.h"
+#include "test/test_yottaflux.h"
 
 #include <stdint.h>
 

@@ -6,12 +6,12 @@
 
 """Test using named arguments for RPCs."""
 
-from test_framework.test_framework import RavenTestFramework
+from test_framework.test_framework import YottafluxTestFramework
 from test_framework.util import assert_equal, assert_raises_rpc_error
 
 
 # noinspection PyTypeChecker
-class NamedArgumentTest(RavenTestFramework):
+class NamedArgumentTest(YottafluxTestFramework):
     def set_test_params(self):
         self.num_nodes = 1
 

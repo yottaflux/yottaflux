@@ -1,4 +1,4 @@
-#include "ravenunits.h"
+#include "yottafluxunits.h"
 
 #include <QAbstractTableModel>
 #include <QStringList>
@@ -53,7 +53,7 @@ public:
                 TxPlainTextRole,
         /** Unprocessed icon */
                 RawDecorationRole,
-        /** RVN or name of an asset */
+        /** YAI or name of an asset */
                 AssetNameRole,
     };
 

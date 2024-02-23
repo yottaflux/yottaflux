@@ -3,8 +3,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef RAVEN_QT_OPTIONSMODEL_H
-#define RAVEN_QT_OPTIONSMODEL_H
+#ifndef YOTTAFLUX_QT_OPTIONSMODEL_H
+#define YOTTAFLUX_QT_OPTIONSMODEL_H
 
 #include "amount.h"
 
@@ -14,7 +14,7 @@ QT_BEGIN_NAMESPACE
 class QNetworkProxy;
 QT_END_NAMESPACE
 
-/** Interface from Qt to configuration data structure for Raven client.
+/** Interface from Qt to configuration data structure for Yottaflux client.
    To Qt, the options are presented as a list with the different options
    laid out vertically.
    This can be changed to a tree once the settings become sufficiently
@@ -40,7 +40,7 @@ public:
         ProxyUseTor,            // bool
         ProxyIPTor,             // QString
         ProxyPortTor,           // int
-        DisplayUnit,            // RavenUnits::Unit
+        DisplayUnit,            // YottafluxUnits::Unit
         DisplayCurrencyIndex,   // int
         ThirdPartyTxUrls,       // QString
         IpfsUrl,                // QString
@@ -96,10 +96,10 @@ private:
     QString strThirdPartyTxUrls;
     QString strIpfsUrl;
     bool fCoinControlFeatures;
-    /** RVN START*/
+    /** YAI START*/
     bool fCustomFeeFeatures;
     bool fDarkModeEnabled;
-    /** RVN END*/
+    /** YAI END*/
     /* settings that were overridden by command-line */
     QString strOverriddenByCommandLine;
 
@@ -117,4 +117,4 @@ Q_SIGNALS:
     void updateIconsOnlyToolbar(bool);
 };
 
-#endif // RAVEN_QT_OPTIONSMODEL_H
+#endif // YOTTAFLUX_QT_OPTIONSMODEL_H

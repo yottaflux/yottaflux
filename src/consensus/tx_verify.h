@@ -3,8 +3,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef RAVEN_CONSENSUS_TX_VERIFY_H
-#define RAVEN_CONSENSUS_TX_VERIFY_H
+#ifndef YOTTAFLUX_CONSENSUS_TX_VERIFY_H
+#define YOTTAFLUX_CONSENSUS_TX_VERIFY_H
 
 #include "amount.h"
 
@@ -37,9 +37,9 @@ namespace Consensus {
  */
 bool CheckTxInputs(const CTransaction& tx, CValidationState& state, const CCoinsViewCache& inputs, int nSpendHeight, CAmount& txfee);
 
-/** RVN START */
+/** YAI START */
 bool CheckTxAssets(const CTransaction& tx, CValidationState& state, const CCoinsViewCache& inputs, CAssetsCache* assetCache, bool fCheckMempool, std::vector<std::pair<std::string, uint256> >& vPairReissueAssets, const bool fRunningUnitTests = false, std::set<CMessage>* setMessages = nullptr, int64_t nBlocktime = 0,  std::vector<std::pair<std::string, CNullAssetTxData>>* myNullAssetData = nullptr);
-/** RVN END */
+/** YAI END */
 } // namespace Consensus
 
 /** Auxiliary functions for transaction validation (ideally should not be exposed) */
@@ -90,4 +90,4 @@ bool EvaluateSequenceLocks(const CBlockIndex& block, std::pair<int, int64_t> loc
  */
 bool SequenceLocks(const CTransaction &tx, int flags, std::vector<int>* prevHeights, const CBlockIndex& block);
 
-#endif // RAVEN_CONSENSUS_TX_VERIFY_H
+#endif // YOTTAFLUX_CONSENSUS_TX_VERIFY_H

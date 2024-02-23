@@ -3,16 +3,16 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef RAVEN_CHAINPARAMSBASE_H
-#define RAVEN_CHAINPARAMSBASE_H
+#ifndef YOTTAFLUX_CHAINPARAMSBASE_H
+#define YOTTAFLUX_CHAINPARAMSBASE_H
 
 #include <memory>
 #include <string>
 #include <vector>
 
 /**
- * CBaseChainParams defines the base parameters (shared between raven-cli and ravend)
- * of a given instance of the Raven system.
+ * CBaseChainParams defines the base parameters (shared between yottaflux-cli and yottafluxd)
+ * of a given instance of the Yottaflux system.
  */
 class CBaseChainParams
 {
@@ -61,4 +61,4 @@ void SelectBaseParams(const std::string& chain);
  */
 std::string ChainNameFromCommandLine();
 
-#endif // RAVEN_CHAINPARAMSBASE_H
+#endif // YOTTAFLUX_CHAINPARAMSBASE_H

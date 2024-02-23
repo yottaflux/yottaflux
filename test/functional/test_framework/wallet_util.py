@@ -181,7 +181,7 @@ bip39_english = [
     "punch","pupil","puppy","purchase","purity","purpose","purse","push","put","puzzle",
     "pyramid","quality","quantum","quarter","question","quick","quit","quiz","quote","rabbit",
     "raccoon","race","rack","radar","radio","rail","rain","raise","rally","ramp",
-    "ranch","random","range","rapid","rare","rate","rather","raven","raw","razor",
+    "ranch","random","range","rapid","rare","rate","rather","yottaflux","raw","razor",
     "ready","real","reason","rebel","rebuild","recall","receive","recipe","record","recycle",
     "reduce","reflect","reform","refuse","region","regret","regular","reject","relax","release",
     "relief","rely","remain","remember","remind","remove","render","renew","rent","reopen",
