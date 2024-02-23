@@ -112,6 +112,12 @@ public:
     const std::string& AddNullQualifierTagBurnAddress() const { return strAddNullQualifierTagBurnAddress; }
     const std::string& GlobalBurnAddress() const { return strGlobalBurnAddress; }
 
+    const CAmount& CommunityDevelopmentAmount() const { return nCommunityDevelopmentAmount; }
+    const std::string& CommunityDevelopmentAddress() const { return strCommunityDevelopmentAddress; }
+
+    const CAmount& CommunitySubsidyAmount() const { return nCommunitySubsidyAmount; }
+    const std::string& CommunitySubsidyAddress() const { return strCommunitySubsidyAddress; }
+
     //  Indicates whether or not the provided address is a burn address
     bool IsBurnAddress(const std::string & p_address) const
     {
@@ -186,6 +192,14 @@ protected:
     std::string strIssueSubQualifierAssetBurnAddress;
     std::string strIssueRestrictedAssetBurnAddress;
     std::string strAddNullQualifierTagBurnAddress;
+
+    // Community funds
+    CAmount nCommunityDevelopmentAmount;
+    std::string strCommunityDevelopmentAddress;
+
+    CAmount nCommunitySubsidyAmount;
+    std::string strCommunitySubsidyAddress;
+
 
     // Global Burn Address
     std::string strGlobalBurnAddress;

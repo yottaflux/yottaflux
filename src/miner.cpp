@@ -172,11 +172,79 @@ std::unique_ptr<CBlockTemplate> BlockAssembler::CreateNewBlock(const CScript& sc
 
     // Create coinbase transaction.
     CMutableTransaction coinbaseTx;
+
+    // YAI start - add dev and subsidy
+
     coinbaseTx.vin.resize(1);
     coinbaseTx.vin[0].prevout.SetNull();
-    coinbaseTx.vout.resize(1);
+
+
+    // vout
+    coinbaseTx.vout.resize(3); // 0 for dev, 1 for sub, 2 for reward
+
+    // Calculate values
+    CAmount nSubsidy 					= GetBlockSubsidy(nHeight, chainparams.GetConsensus());
+    CAmount nCommunityDevelopmentAmount 	= GetParams().CommunityDevelopmentAmount();
+    CAmount nCommunitySubsidyAmount = GetParams().CommunitySubsidyAmount();
+
+    CAmount nDevCalculatedAmount = nCommunityDevelopmentAmount * nSubsidy / 100;
+    CAmount nSubCalculatedAmount = nCommunitySubsidyAmount * nSubsidy / 100;
+    CAmount nBlockSubAmount = nSubsidy - nDevCalculatedAmount - nSubCalculatedAmount;
+
+    // Transactions - reward
     coinbaseTx.vout[0].scriptPubKey = scriptPubKeyIn;
-    coinbaseTx.vout[0].nValue = nFees + GetBlockSubsidy(nHeight, chainparams.GetConsensus());
+    coinbaseTx.vout[0].nValue = nFees + nBlockSubAmount;
+
+    LogPrintf("nSubsidy: ====================================================\n");
+    LogPrintf("nSubsidy start: %ld\n\n", nSubsidy);
+
+    LogPrintf("nCommunityDevelopmentAmount pct: %ld\n", nCommunityDevelopmentAmount);
+    LogPrintf("nDevCalculatedAmount: %ld\n\n", nDevCalculatedAmount);
+
+    LogPrintf("nCommunitySubsidyAmount pct: %ld\n", nCommunitySubsidyAmount);
+    LogPrintf("nSubCalculatedAmount: %ld\n\n", nSubCalculatedAmount);
+
+    LogPrintf("Miner: %ld \n", coinbaseTx.vout[0].nValue);
+    LogPrintf("scriptPubKeyIn: %s \n\n", HexStr(scriptPubKeyIn));
+
+
+    // Transactions - dev
+    std::string  GetCommunityDevelopmentAddress 	= GetParams().CommunityDevelopmentAddress();
+    CTxDestination destCommunityDevelopment = DecodeDestination(GetCommunityDevelopmentAddress);
+    if (!IsValidDestination(destCommunityDevelopment)) {
+        LogPrintf("IsValidDestination: Invalid YAI address %s \n", GetCommunityDevelopmentAddress);
+    }
+    // We need to parse the address ready to send to it
+    CScript scriptPubKeyCommunityDevelopment = GetScriptForDestination(destCommunityDevelopment);
+
+    coinbaseTx.vout[1].scriptPubKey = scriptPubKeyCommunityDevelopment;
+    coinbaseTx.vout[1].nValue = nDevCalculatedAmount;
+
+
+    LogPrintf("GetCommunityDevelopmentAddress: %s \n", GetCommunityDevelopmentAddress);
+    LogPrintf("scriptPubKeyCommunityDevelopment: %s \n", HexStr(scriptPubKeyCommunityDevelopment));
+    LogPrintf("nCommunityDevAmount: %ld \n\n", coinbaseTx.vout[1].nValue);
+
+    // Transactions - sub
+    std::string  GetCommunitySubsidyAddress 	= GetParams().CommunitySubsidyAddress();
+    CTxDestination destCommunitySubsidy = DecodeDestination(GetCommunitySubsidyAddress);
+    if (!IsValidDestination(destCommunitySubsidy)) {
+        LogPrintf("IsValidDestination: Invalid YAI address %s \n", GetCommunitySubsidyAddress);
+    }
+    // We need to parse the address ready to send to it
+    CScript scriptPubKeyCommunitySubsidy = GetScriptForDestination(destCommunitySubsidy);
+
+    coinbaseTx.vout[2].scriptPubKey = scriptPubKeyCommunitySubsidy;
+    coinbaseTx.vout[2].nValue = nSubCalculatedAmount;
+
+
+    LogPrintf("GetCommunitySubsidyAddress: %s \n", GetCommunitySubsidyAddress);
+    LogPrintf("scriptPubKeyCommunitySubsidy: %s \n", HexStr(scriptPubKeyCommunitySubsidy));
+    LogPrintf("nCommunitySubsidyAmount: %ld \n\n", coinbaseTx.vout[2].nValue);
+
+
+    // Finish up
+
     coinbaseTx.vin[0].scriptSig = CScript() << nHeight << OP_0;
     pblock->vtx[0] = MakeTransactionRef(std::move(coinbaseTx));
     pblocktemplate->vchCoinbaseCommitment = GenerateCoinbaseCommitment(*pblock, pindexPrev, chainparams.GetConsensus());

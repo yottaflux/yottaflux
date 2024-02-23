@@ -117,17 +117,18 @@ class CMainParams : public CChainParams {
 public:
     CMainParams() {
         strNetworkID = "main";
-        consensus.nSubsidyHalvingInterval = 2100000;  //~ 4 yrs at 1 min block time
+        consensus.nSubsidyHalvingInterval = 60 * 24 * 90; //~ 90 days at 1 min block time
         consensus.nBIP34Enabled = true;
         consensus.nBIP65Enabled = true; // 000000000000000004c2b624ed5d7756c508d90fd0da2c7c679febfa6c4735f0
         consensus.nBIP66Enabled = true;
         consensus.nSegwitEnabled = true;
         consensus.nCSVEnabled = true;
-        consensus.powLimit = uint256S("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
-        consensus.kawpowLimit = uint256S("0000000000ffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // Estimated starting diff for first 180 kawpow blocks
-        consensus.nPowTargetTimespan = 2016 * 60; // 1.4 days
+        consensus.powLimit 		= uint256S("00ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        consensus.kawpowLimit 	= uint256S("0000000fffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // Estimated starting diff for first 180 kawpow blocks
+        // Estimated starting diff for first 180 kawpow blocks
+        consensus.nPowTargetTimespan = 100 * 60; // 1.4 days
         consensus.nPowTargetSpacing = 1 * 60;
-		consensus.fPowAllowMinDifficultyBlocks = false;
+        consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
         consensus.nRuleChangeActivationThreshold = 1613; // Approx 80% of 2016
         consensus.nMinerConfirmationWindow = 2016; // nPowTargetTimespan / nPowTargetSpacing
@@ -186,7 +187,10 @@ public:
 
         uint32_t nGenesisTime = 1707491747; //  02/09/2024 09:15:47 AM -0600
 
-        nKAAAWWWPOWActivationTime = 2707491747; // nGenesisTime + 60;
+        // nKAAAWWWPOWActivationTime = nGenesisTime + 1;
+        // nKAWPOWActivationTime = nKAAAWWWPOWActivationTime;
+
+        nKAAAWWWPOWActivationTime = 3567587327;
         nKAWPOWActivationTime = nKAAAWWWPOWActivationTime;
 
         genesis = CreateGenesisBlock(nGenesisTime, 5751947, 0x1e00ffff, 4, 5000 * COIN);
@@ -209,8 +213,8 @@ public:
         base58Prefixes[EXT_PUBLIC_KEY] = {0x04, 0x88, 0xB2, 0x1E};
         base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x88, 0xAD, 0xE4};
 
-        // Yottaflux BIP44 cointype in mainnet is '175'
-        nExtCoinType = 175;
+        // Yotta BIP44 cointype in mainnet is '5050'
+        nExtCoinType = 5050;
 
         fDefaultConsistencyChecks = false;
         fRequireStandard = true;
@@ -244,22 +248,31 @@ public:
         nIssueRestrictedAssetBurnAmount = 1500 * COIN;
         nAddNullQualifierTagBurnAmount = .1 * COIN;
 
-        // Burn Addresses
-        strIssueAssetBurnAddress = "RXissueAssetXXXXXXXXXXXXXXXXXhhZGt";
-        strReissueAssetBurnAddress = "RXReissueAssetXXXXXXXXXXXXXXVEFAWu";
-        strIssueSubAssetBurnAddress = "RXissueSubAssetXXXXXXXXXXXXXWcwhwL";
-        strIssueUniqueAssetBurnAddress = "RXissueUniqueAssetXXXXXXXXXXWEAe58";
-        strIssueMsgChannelAssetBurnAddress = "RXissueMsgChanneLAssetXXXXXXSjHvAY";
-        strIssueQualifierAssetBurnAddress = "RXissueQuaLifierXXXXXXXXXXXXUgEDbC";
-        strIssueSubQualifierAssetBurnAddress = "RXissueSubQuaLifierXXXXXXXXXVTzvv5";
-        strIssueRestrictedAssetBurnAddress = "RXissueRestrictedXXXXXXXXXXXXzJZ1q";
-        strAddNullQualifierTagBurnAddress = "RXaddTagBurnXXXXXXXXXXXXXXXXZQm5ya";
+        // Dev fund
+        nCommunityDevelopmentAmount = 10;
+        nCommunitySubsidyAmount = 30;
 
-            //Global Burn Address
-        strGlobalBurnAddress = "RXBurnXXXXXXXXXXXXXXXXXXXXXXWUo9FV";
+        strCommunityDevelopmentAddress = "YcMZLejJUFSzXYqp5wqrqRyKg3ySMxzYte";
+        strCommunitySubsidyAddress = "YavbEessbLmxPPYMAjLH2kER4NyLoiDjcm";
+
+
+
+        // Burn Addresses
+        strIssueAssetBurnAddress = "YAissueAssetXXXXXXXXXXXXXXXXXhhZGt";
+        strReissueAssetBurnAddress = "YAReissueAssetXXXXXXXXXXXXXXVEFAWu";
+        strIssueSubAssetBurnAddress = "YAissueSubAssetXXXXXXXXXXXXXWcwhwL";
+        strIssueUniqueAssetBurnAddress = "YAissueUniqueAssetXXXXXXXXXXWEAe58";
+        strIssueMsgChannelAssetBurnAddress = "YAissueMsgChanneLAssetXXXXXXSjHvAY";
+        strIssueQualifierAssetBurnAddress = "YAissueQuaLifierXXXXXXXXXXXXUgEDbC";
+        strIssueSubQualifierAssetBurnAddress = "YAissueSubQuaLifierXXXXXXXXXVTzvv5";
+        strIssueRestrictedAssetBurnAddress = "YAissueRestrictedXXXXXXXXXXXXzJZ1q";
+        strAddNullQualifierTagBurnAddress = "YAaddTagBurnXXXXXXXXXXXXXXXXZQm5ya";
+
+        //Global Burn Address
+        strGlobalBurnAddress = "YABurnXXXXXXXXXXXXXXXXXXXXXXWUo9FV";
 
         // DGW Activation
-        nDGWActivationBlock = 2;
+        nDGWActivationBlock = 1;
 
         nMaxReorganizationDepth = 60; // 60 at 1 minute block timespan is +/- 60 minutes.
         nMinReorganizationPeers = 4;
@@ -280,7 +293,7 @@ class CTestNetParams : public CChainParams {
 public:
     CTestNetParams() {
         strNetworkID = "test";
-        consensus.nSubsidyHalvingInterval = 2100000;  //~ 4 yrs at 1 min block time
+        consensus.nSubsidyHalvingInterval = 60 * 24 * 30; //~ 30 days
         consensus.nBIP34Enabled = true;
         consensus.nBIP65Enabled = true; // 000000000000000004c2b624ed5d7756c508d90fd0da2c7c679febfa6c4735f0
         consensus.nBIP66Enabled = true;
@@ -343,7 +356,10 @@ public:
 
         uint32_t nGenesisTime = 1707490166; //  02/09/2024 08:49:26 AM -0600
 
-        nKAAAWWWPOWActivationTime = 2707491747; // nGenesisTime + 60;
+        // nKAAAWWWPOWActivationTime = nGenesisTime + 1;
+        // nKAWPOWActivationTime = nKAAAWWWPOWActivationTime;
+
+        nKAAAWWWPOWActivationTime = 3567587327;
         nKAWPOWActivationTime = nKAAAWWWPOWActivationTime;
 
 
@@ -459,6 +475,14 @@ public:
         nIssueRestrictedAssetBurnAmount = 1500 * COIN;
         nAddNullQualifierTagBurnAmount = .1 * COIN;
 
+        // Dev fund
+        nCommunityDevelopmentAmount = 10;
+        nCommunitySubsidyAmount = 30;
+
+        strCommunityDevelopmentAddress = "n1MDTt2zQJ7vkHxnMudX7P67M76umc57FU";
+        strCommunitySubsidyAddress = "n3zrHVsrDA52JgvsnLmd7Y782VC9JtANcQ";
+
+
         // Burn Addresses
         strIssueAssetBurnAddress = "n1issueAssetXXXXXXXXXXXXXXXXWdnemQ";
         strReissueAssetBurnAddress = "n1ReissueAssetXXXXXXXXXXXXXXWG9NLd";
@@ -555,7 +579,7 @@ public:
 
         uint32_t nGenesisTime = 1707491605; //  02/09/2024 09:13:25 AM -0600
 
-        nKAAAWWWPOWActivationTime = 2707491747; // nGenesisTime + 60;
+        nKAAAWWWPOWActivationTime = nGenesisTime + 1;
         nKAWPOWActivationTime = nKAAAWWWPOWActivationTime;
 
 
@@ -665,6 +689,15 @@ public:
         nIssueRestrictedAssetBurnAmount = 1500 * COIN;
         nAddNullQualifierTagBurnAmount = .1 * COIN;
 
+        // Dev fund
+        nCommunityDevelopmentAmount = 10;
+        nCommunitySubsidyAmount = 30;
+
+        strCommunityDevelopmentAddress = "mhXBsq5cN3pqtXCqVACuva2CQNzHdYcmYC";
+        strCommunitySubsidyAddress = "n42rJAdeveUKP6PvQHKE6b55bYWzLeYtj7";
+
+
+
         // Burn Addresses
         strIssueAssetBurnAddress = "n1issueAssetXXXXXXXXXXXXXXXXWdnemQ";
         strReissueAssetBurnAddress = "n1ReissueAssetXXXXXXXXXXXXXXWG9NLd";
@@ -693,8 +726,6 @@ public:
         // TODO, we need to figure out what to do with this for regtest. This effects the unit tests
         // For now we can use a timestamp very far away
         // If you are looking to test the kawpow hashing function in regtest. You will need to change this number
-        nKAAAWWWPOWActivationTime = 3582830167;
-        nKAWPOWActivationTime = nKAAAWWWPOWActivationTime;
         /** YAI End **/
     }
 };
