@@ -34,6 +34,7 @@
 
 #include <boost/thread.hpp>
 #include <algorithm>
+#include <base58.h>
 #include <queue>
 #include <utility>
 
