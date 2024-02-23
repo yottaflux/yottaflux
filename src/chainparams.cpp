@@ -203,8 +203,8 @@ public:
         assert(consensus.hashGenesisBlock == uint256S("0x000000f13b9584fc6830148c59ec77e5671a5ac3ff0f26a9ae0679c0ca40f579"));
         assert(genesis.hashMerkleRoot == uint256S("648156c6987915ad1270f7ffac0d57b7a2dd4fecaa0f59d059e0166213df2815"));
 
-        // vSeeds.emplace_back("seed.yottaflux.com", false);
-        vSeeds.clear();
+        vSeeds.emplace_back("seed.yottaflux.ai", false);
+        // vSeeds.clear();
         vFixedSeeds.clear();
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 78); // Y
@@ -433,7 +433,7 @@ public:
         assert(genesis.hashMerkleRoot == uint256S("648156c6987915ad1270f7ffac0d57b7a2dd4fecaa0f59d059e0166213df2815"));
 
         vFixedSeeds.clear();
-        vSeeds.clear();
+        vSeeds.emplace_back("seed-test.yottaflux.ai", false);
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,111);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,196);
