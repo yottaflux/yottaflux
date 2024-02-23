@@ -34,7 +34,7 @@ if [ -z "${ENVIRONMENT}" ]; then
   exec yottafluxd -printtoconsole
 elif [ "${ENVIRONMENT}" == "dev" ]; then
   mkdir -p /root/.yottaflux/testnet7
-  cp scripts/yottaflux_test.conf /root/.yottaflux/testnet7/yottaflux.conf
+  cp scripts/yottaflux_test.conf /root/.yottaflux/yottaflux.conf
   exec yottafluxd -testnet -printtoconsole
 elif [ "${ENVIRONMENT}" == "prod" ]; then
   mkdir /root/.yottaflux

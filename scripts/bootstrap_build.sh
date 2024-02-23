@@ -47,8 +47,10 @@ cd "${HOME}"/yottaflux || exit
 ./autogen.sh
 ./configure BDB_LIBS="-L${HOME}/db4/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${HOME}/db4/include" \
     --disable-test --disable-bench --without-gui
-make -j
+make -j2
 sudo make install
+
+sudo ln -s /home/ubuntu/yottaflux/scripts/yotta.service /etc/systemd/system/yotta.service
 
 
 
