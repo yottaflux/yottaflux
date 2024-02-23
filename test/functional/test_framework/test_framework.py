@@ -325,7 +325,7 @@ class YottafluxTestFramework:
 
         NOTE: the timestamp should match time of genesis block.
         NOTE: the timestamp could be retrieved via "getblockhash 0" + "getblock <hash>"."""
-        self.mocktime = 1524179366 + (201 * 1 * 60)
+        self.mocktime = 1707491605 + (201 * 1 * 60)
 
     def disable_mocktime(self):
         self.mocktime = 0

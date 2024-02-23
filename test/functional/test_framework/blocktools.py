@@ -26,7 +26,7 @@ def create_block(hash_prev, coinbase, n_time=None):
     return block
 
 # Genesis block time (regtest)
-REGTEST_GENISIS_BLOCK_TIME = 1537466400
+REGTEST_GENISIS_BLOCK_TIME = 1707491605
 
 # From BIP141
 WITNESS_COMMITMENT_HEADER = b"\xaa\x21\xa9\xed"
