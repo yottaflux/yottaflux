@@ -181,7 +181,7 @@ std::unique_ptr<CBlockTemplate> BlockAssembler::CreateNewBlock(const CScript& sc
 
 
     // vout
-    coinbaseTx.vout.resize(3); // 0 for dev, 1 for sub, 2 for reward
+    coinbaseTx.vout.resize(3); // 0 for reward, 1 for dev, 2 for subsidy
 
     // Calculate values
     CAmount nSubsidy 					= GetBlockSubsidy(nHeight, chainparams.GetConsensus());

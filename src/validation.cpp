@@ -1321,15 +1321,24 @@ bool ReadBlockFromDisk(CBlock& block, const CBlockIndex* pindex, const Consensus
 
 CAmount GetBlockSubsidy(int nHeight, const Consensus::Params& consensusParams)
 {
-    int halvings = nHeight / consensusParams.nSubsidyHalvingInterval;
-    // Force block reward to zero when right shift is undefined.
-    if (halvings >= 64)
-        return 0;
-
     CAmount nSubsidy = 5000 * COIN;
-    // Subsidy is cut in half every 2,100,000 blocks which will occur approximately every 4 years.
-    nSubsidy >>= halvings;
-    return nSubsidy;
+
+    // YAI -- it's easier just to hard-code this....
+    if (nHeight < 129600) return nSubsidy;
+    if (nHeight < 187200) return nSubsidy >> 1;
+    if (nHeight < 270720) return nSubsidy >> 2;
+    if (nHeight < 391680) return nSubsidy >> 3;
+    if (nHeight < 567360) return nSubsidy >> 4;
+    if (nHeight < 822240) return nSubsidy >> 5;
+    if (nHeight < 1190880) return nSubsidy >> 6;
+    if (nHeight < 1726560) return nSubsidy >> 7;
+    if (nHeight < 2502720) return nSubsidy >> 8;
+    if (nHeight < 3628800) return nSubsidy >> 9;
+    if (nHeight < 5261760) return nSubsidy >> 10;
+    if (nHeight < 7629120) return nSubsidy >> 11;
+    if (nHeight < 11062080) return nSubsidy >> 12;
+    return 0;
+
 }
 
 bool IsInitialBlockDownload()
@@ -2744,6 +2753,77 @@ static bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockInd
                          error("ConnectBlock(): coinbase pays too much (actual=%d vs limit=%d)",
                                block.vtx[0]->GetValueOut(AreEnforcedValuesDeployed()), blockReward),
                                REJECT_INVALID, "bad-cb-amount");
+
+    /** YAI START */
+    // End of stack structure --- // 0 for reward, 1 for dev, 2 for subsidy
+
+	//GetCommunityDevelopmentAddress Assign 10%
+    CAmount nSubsidy 							= GetBlockSubsidy(pindex->nHeight, chainparams.GetConsensus());
+
+    std::string  GetCommunityDevelopmentAddress 	= GetParams().CommunityDevelopmentAddress();
+    CTxDestination destCommunityDevelopment 		= DecodeDestination(GetCommunityDevelopmentAddress);
+    if (!IsValidDestination(destCommunityDevelopment)) {
+		LogPrintf("IsValidDestination: Invalid YAI address %s \n", GetCommunityDevelopmentAddress);
+    }
+    // Parse YAI address
+    CScript scriptPubKeyCommunityDevelopment 	= GetScriptForDestination(destCommunityDevelopment);
+
+    CAmount nCommunityDevelopmentAmount 			= GetParams().CommunityDevelopmentAmount();
+    CAmount nCommunityDevelopmentAmountValue		= nSubsidy*nCommunityDevelopmentAmount/100;
+
+	LogPrintf("==>block.vtx[0]->vout[1].nValue:    %ld \n", block.vtx[0]->vout[1].nValue);
+	LogPrintf("==>nCommunityDevelopmentAmountValue: %ld \n", nCommunityDevelopmentAmountValue);
+	LogPrintf("==>block.vtx[0]->vout[1].scriptPubKey: %s \n", block.vtx[0]->vout[1].scriptPubKey[3]);
+	LogPrintf("==>GetCommunityDevelopmentAddress:   %s \n", GetCommunityDevelopmentAddress);
+	LogPrintf("==>scriptPubKeyCommunityDevelopment    Actual: %s \n", HexStr(block.vtx[0]->vout[1].scriptPubKey));
+	LogPrintf("==>scriptPubKeyCommunityDevelopment Should Be: %s \n", HexStr(scriptPubKeyCommunityDevelopment));
+
+	//Check 10% Amount
+	if(block.vtx[0]->vout[1].nValue != nCommunityDevelopmentAmountValue )		{
+		return state.DoS(100,
+                         error("ConnectBlock(): coinbase Community Development Amount Is Invalid. Actual: %ld Should be:%ld ",block.vtx[0]->vout[1].nValue, nCommunityDevelopmentAmountValue),
+                         REJECT_INVALID, "bad-cb-community-development-amount");
+	}
+	//Check 10% Address
+	if( HexStr(block.vtx[0]->vout[1].scriptPubKey) != HexStr(scriptPubKeyCommunityDevelopment) )		{
+		return state.DoS(100,
+                         error("ConnectBlock(): coinbase Community Development Address Is Invalid. Actual: %s Should Be: %s \n",HexStr(block.vtx[0]->vout[1].scriptPubKey), HexStr(scriptPubKeyCommunityDevelopment)),
+                         REJECT_INVALID, "bad-cb-community-development-address");
+	}
+
+	//GetCommunitySubsidyAddress Assign 30%
+	std::string  GetCommunitySubsidyAddress 	= GetParams().CommunitySubsidyAddress();
+	CTxDestination destCommunitySubsidy 		= DecodeDestination(GetCommunitySubsidyAddress);
+
+    CScript scriptPubKeyCommunitySubsidy 	= GetScriptForDestination(destCommunitySubsidy);
+
+	CAmount nCommunitySubsidyAmount 			= GetParams().CommunityDevelopmentAmount();
+	CAmount nCommunitySubsidyAmountValue		= nSubsidy*nCommunitySubsidyAmount/100;
+
+	LogPrintf("==>block.vtx[0]->vout[2].nValue:    %ld \n", block.vtx[0]->vout[2].nValue);
+    LogPrintf("==>nCommunitySubsidyAmountValue: %ld \n", nCommunitySubsidyAmountValue);
+    LogPrintf("==>block.vtx[0]->vout[2].scriptPubKey: %s \n", block.vtx[0]->vout[2].scriptPubKey[3]);
+    LogPrintf("==>GetCommunitySubsidyAddress:   %s \n", GetCommunitySubsidyAddress);
+	LogPrintf("==>scriptPubKeyCommunitySubsidy    Actual: %s \n", HexStr(block.vtx[0]->vout[2].scriptPubKey));
+	LogPrintf("==>scriptPubKeyCommunitySubsidy Should Be: %s \n", HexStr(scriptPubKeyCommunitySubsidy));
+
+	if(block.vtx[0]->vout[2].nValue != nCommunitySubsidyAmountValue )		{
+		return state.DoS(100,
+                         error("ConnectBlock(): coinbase Community Subsidy Amount Is Invalid. Actual: %ld Should be:%ld ",block.vtx[0]->vout[2].nValue, nCommunitySubsidyAmountValue),
+                         REJECT_INVALID, "bad-cb-community-subsidy-amount");
+	}
+	//Check 10% Address
+	if( HexStr(block.vtx[0]->vout[2].scriptPubKey) != HexStr(scriptPubKeyCommunitySubsidy) )		{
+		return state.DoS(100,
+                         error("ConnectBlock(): coinbase Community Development Subsidy Is Invalid. Actual: %s Should Be: %s \n",HexStr(block.vtx[0]->vout[2].scriptPubKey), HexStr(scriptPubKeyCommunitySubsidy)),
+                         REJECT_INVALID, "bad-cb-community-subsidy-address");
+	}
+
+
+
+    /** YAI END */
+
+
 
     if (!control.Wait())
         return state.DoS(100, error("%s: CheckQueue failed", __func__), REJECT_INVALID, "block-validation-failed");
