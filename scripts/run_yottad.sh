@@ -27,19 +27,17 @@ AZ=$(curl  --silent http://169.254.169.254/latest/meta-data/placement/availabili
 REGION=${AZ::-1}
 
 echo Configuring yotta seed for IP $MY_IP , AZ $AZ , in region $REGION - $ENVIRONMENT mode
+mkdir /yottaflux || true
 
 if [ -z "${ENVIRONMENT}" ]; then
-  mkdir /root/.yottaflux
-  cp scripts/yottaflux.conf /root/.yottaflux/yottaflux.conf
-  exec yottafluxd -printtoconsole
+  cp scripts/yottaflux.conf /yottaflux/yottaflux.conf
+  exec yottafluxd -printtoconsole -datadir=/yottaflux
 elif [ "${ENVIRONMENT}" == "dev" ]; then
-  mkdir -p /root/.yottaflux/testnet7
-  cp scripts/yottaflux_test.conf /root/.yottaflux/yottaflux.conf
-  exec yottafluxd -testnet -printtoconsole
+  cp scripts/yottaflux_test.conf /yottaflux/yottaflux.conf
+  exec yottafluxd -testnet -printtoconsole -datadir=/yottaflux
 elif [ "${ENVIRONMENT}" == "prod" ]; then
-  mkdir /root/.yottaflux
-  cp scripts/yottaflux.conf /root/.yottaflux/yottaflux.conf
-  exec yottafluxd -printtoconsole
+  cp scripts/yottaflux.conf /yottaflux/yottaflux.conf
+  exec yottafluxd -printtoconsole -datadir=/yottaflux
 else
   echo "ERROR: ENVIRONMENT supplied but invalid."
 fi
