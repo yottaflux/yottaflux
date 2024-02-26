@@ -2797,7 +2797,7 @@ static bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockInd
 
     CScript scriptPubKeyCommunitySubsidy 	= GetScriptForDestination(destCommunitySubsidy);
 
-	CAmount nCommunitySubsidyAmount 			= GetParams().CommunityDevelopmentAmount();
+	CAmount nCommunitySubsidyAmount 			= GetParams().CommunitySubsidyAmount();
 	CAmount nCommunitySubsidyAmountValue		= nSubsidy*nCommunitySubsidyAmount/100;
 
 	LogPrintf("==>block.vtx[0]->vout[2].nValue:    %ld \n", block.vtx[0]->vout[2].nValue);

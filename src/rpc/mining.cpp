@@ -371,6 +371,13 @@ UniValue getblocktemplate(const JSONRPCRequest& request)
             "  },\n"
             "  \"coinbasevalue\" : n,              (numeric) maximum allowable input to coinbase transaction, including the generation award and transaction fees (in satoshis)\n"
             "  \"coinbasetxn\" : { ... },          (json object) information for coinbase transaction\n"
+
+            "  \"communitydevelopmentaddress\" : \"xxxx\",          (string) address for community development fund\n"
+            "  \"communitydevelopmentvalue\" : n,          (numeric) amount for community development fund\n"
+
+            "  \"communitysubsidyaddress\" : \"xxxx\",          (string) address for community subsidy fund\n"
+            "  \"communitysubsidyvalue\" : n,          (numeric) amount for community subsidy fund\n"
+
             "  \"target\" : \"xxxx\",                (string) The hash target\n"
             "  \"mintime\" : xxx,                  (numeric) The minimum timestamp appropriate for next block time in seconds since epoch (Jan 1 1970 GMT)\n"
             "  \"mutable\" : [                     (array of string) list of ways the block template may be changed \n"
@@ -688,6 +695,13 @@ UniValue getblocktemplate(const JSONRPCRequest& request)
     result.push_back(Pair("transactions", transactions));
     result.push_back(Pair("coinbaseaux", aux));
     result.push_back(Pair("coinbasevalue", (int64_t)pblock->vtx[0]->vout[0].nValue));
+
+    result.push_back(Pair("communitydevelopmentaddress", GetParams().CommunityDevelopmentAddress()));
+    result.push_back(Pair("communitydevelopmentvalue", (int64_t)pblock->vtx[0]->vout[1].nValue) );
+
+    result.push_back(Pair("communitysubsidyaddress", GetParams().CommunitySubsidyAddress()));
+    result.push_back(Pair("communitysubsidyvalue", (int64_t)pblock->vtx[0]->vout[2].nValue) );
+
     result.push_back(Pair("longpollid", chainActive.Tip()->GetBlockHash().GetHex() + i64tostr(nTransactionsUpdatedLast)));
     result.push_back(Pair("target", hashTarget.GetHex()));
     result.push_back(Pair("mintime", (int64_t)pindexPrev->GetMedianTimePast()+1));
