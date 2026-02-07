@@ -260,23 +260,19 @@ public:
 
 
         // Burn Addresses
-        // TODO: These addresses have invalid Base58Check checksums (version byte decodes
-        // to 0x4d/77 instead of the expected 0x4e/78 for Y-prefix addresses).
-        // They must be regenerated with correct checksums for the mainnet address prefix.
-        // Asset issuance will fail until these are fixed. Use a burn address generator
-        // tool with version byte 78 (e.g. adapted from contrib/burn-address-generator).
-        strIssueAssetBurnAddress = "YAissueAssetXXXXXXXXXXXXXXXXXhhZGt";
-        strReissueAssetBurnAddress = "YAReissueAssetXXXXXXXXXXXXXXVEFAWu";
-        strIssueSubAssetBurnAddress = "YAissueSubAssetXXXXXXXXXXXXXWcwhwL";
-        strIssueUniqueAssetBurnAddress = "YAissueUniqueAssetXXXXXXXXXXWEAe58";
-        strIssueMsgChannelAssetBurnAddress = "YAissueMsgChanneLAssetXXXXXXSjHvAY";
-        strIssueQualifierAssetBurnAddress = "YAissueQuaLifierXXXXXXXXXXXXUgEDbC";
-        strIssueSubQualifierAssetBurnAddress = "YAissueSubQuaLifierXXXXXXXXXVTzvv5";
-        strIssueRestrictedAssetBurnAddress = "YAissueRestrictedXXXXXXXXXXXXzJZ1q";
-        strAddNullQualifierTagBurnAddress = "YAaddTagBurnXXXXXXXXXXXXXXXXZQm5ya";
+        // Generated with: python3 contrib/generate_burn_addresses.py --version 78
+        strIssueAssetBurnAddress = "YissueAssetXXXXXXXXXXXXXXXXXW8oK1h";
+        strReissueAssetBurnAddress = "YReissueAssetXXXXXXXXXXXXXXXYcNAB6";
+        strIssueSubAssetBurnAddress = "YissueSubAssetXXXXXXXXXXXXXXcAjBNU";
+        strIssueUniqueAssetBurnAddress = "YissueUniqueAssetXXXXXXXXXXXZAr1F6";
+        strIssueMsgChannelAssetBurnAddress = "YissueMsgChanneLAssetXXXXXXXdbjHqe";
+        strIssueQualifierAssetBurnAddress = "YissueQuaLifierXXXXXXXXXXXXXTQvwL8";
+        strIssueSubQualifierAssetBurnAddress = "YissueSubQuaLifierXXXXXXXXXXYJchwm";
+        strIssueRestrictedAssetBurnAddress = "YissueRestrictedXXXXXXXXXXXXUkSk3r";
+        strAddNullQualifierTagBurnAddress = "YaddTagBurnXXXXXXXXXXXXXXXXXZJAYt2";
 
-        // Global Burn Address (also has invalid checksum — see TODO above)
-        strGlobalBurnAddress = "YABurnXXXXXXXXXXXXXXXXXXXXXXWUo9FV";
+        // Global Burn Address
+        strGlobalBurnAddress = "YburnXXXXXXXXXXXXXXXXXXXXXXXYqtbxJ";
 
         // DGW Activation
         nDGWActivationBlock = 1;
