@@ -117,7 +117,9 @@ class CMainParams : public CChainParams {
 public:
     CMainParams() {
         strNetworkID = "main";
-        consensus.nSubsidyHalvingInterval = 60 * 24 * 90; //~ 90 days at 1 min block time
+        // NOTE: nSubsidyHalvingInterval is not used by GetBlockSubsidy() which has
+        // a hardcoded halving table. This value is kept for API compatibility only.
+        consensus.nSubsidyHalvingInterval = 129600; // ~90 days at 1 min block time (unused)
         consensus.nBIP34Enabled = true;
         consensus.nBIP65Enabled = true; // 000000000000000004c2b624ed5d7756c508d90fd0da2c7c679febfa6c4735f0
         consensus.nBIP66Enabled = true;
@@ -126,12 +128,12 @@ public:
         consensus.powLimit 		= uint256S("00ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         consensus.kawpowLimit 	= uint256S("0000000fffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // Estimated starting diff for first 180 kawpow blocks
         // Estimated starting diff for first 180 kawpow blocks
-        consensus.nPowTargetTimespan = 100 * 60; // 1.4 days
+        consensus.nPowTargetTimespan = 100 * 60; // 100 minutes
         consensus.nPowTargetSpacing = 1 * 60;
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
         consensus.nRuleChangeActivationThreshold = 1613; // Approx 80% of 2016
-        consensus.nMinerConfirmationWindow = 2016; // nPowTargetTimespan / nPowTargetSpacing
+        consensus.nMinerConfirmationWindow = 2016; // BIP9 signaling window
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1199145601; // January 1, 2008
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = 1230767999; // December 31, 2008
@@ -258,18 +260,19 @@ public:
 
 
         // Burn Addresses
-        strIssueAssetBurnAddress = "YAissueAssetXXXXXXXXXXXXXXXXXhhZGt";
-        strReissueAssetBurnAddress = "YAReissueAssetXXXXXXXXXXXXXXVEFAWu";
-        strIssueSubAssetBurnAddress = "YAissueSubAssetXXXXXXXXXXXXXWcwhwL";
-        strIssueUniqueAssetBurnAddress = "YAissueUniqueAssetXXXXXXXXXXWEAe58";
-        strIssueMsgChannelAssetBurnAddress = "YAissueMsgChanneLAssetXXXXXXSjHvAY";
-        strIssueQualifierAssetBurnAddress = "YAissueQuaLifierXXXXXXXXXXXXUgEDbC";
-        strIssueSubQualifierAssetBurnAddress = "YAissueSubQuaLifierXXXXXXXXXVTzvv5";
-        strIssueRestrictedAssetBurnAddress = "YAissueRestrictedXXXXXXXXXXXXzJZ1q";
-        strAddNullQualifierTagBurnAddress = "YAaddTagBurnXXXXXXXXXXXXXXXXZQm5ya";
+        // Generated with: python3 contrib/generate_burn_addresses.py --version 78
+        strIssueAssetBurnAddress = "YissueAssetXXXXXXXXXXXXXXXXXW8oK1h";
+        strReissueAssetBurnAddress = "YReissueAssetXXXXXXXXXXXXXXXYcNAB6";
+        strIssueSubAssetBurnAddress = "YissueSubAssetXXXXXXXXXXXXXXcAjBNU";
+        strIssueUniqueAssetBurnAddress = "YissueUniqueAssetXXXXXXXXXXXZAr1F6";
+        strIssueMsgChannelAssetBurnAddress = "YissueMsgChanneLAssetXXXXXXXdbjHqe";
+        strIssueQualifierAssetBurnAddress = "YissueQuaLifierXXXXXXXXXXXXXTQvwL8";
+        strIssueSubQualifierAssetBurnAddress = "YissueSubQuaLifierXXXXXXXXXXYJchwm";
+        strIssueRestrictedAssetBurnAddress = "YissueRestrictedXXXXXXXXXXXXUkSk3r";
+        strAddNullQualifierTagBurnAddress = "YaddTagBurnXXXXXXXXXXXXXXXXXZJAYt2";
 
-        //Global Burn Address
-        strGlobalBurnAddress = "YABurnXXXXXXXXXXXXXXXXXXXXXXWUo9FV";
+        // Global Burn Address
+        strGlobalBurnAddress = "YburnXXXXXXXXXXXXXXXXXXXXXXXYqtbxJ";
 
         // DGW Activation
         nDGWActivationBlock = 1;
@@ -293,7 +296,9 @@ class CTestNetParams : public CChainParams {
 public:
     CTestNetParams() {
         strNetworkID = "test";
-        consensus.nSubsidyHalvingInterval = 60 * 24 * 30; //~ 30 days
+        // NOTE: nSubsidyHalvingInterval is not used by GetBlockSubsidy() which has
+        // a hardcoded halving table. This value is kept for API compatibility only.
+        consensus.nSubsidyHalvingInterval = 43200; // ~30 days at 1 min block time (unused)
         consensus.nBIP34Enabled = true;
         consensus.nBIP65Enabled = true; // 000000000000000004c2b624ed5d7756c508d90fd0da2c7c679febfa6c4735f0
         consensus.nBIP66Enabled = true;
@@ -302,12 +307,12 @@ public:
 
         consensus.powLimit = uint256S("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         consensus.kawpowLimit = uint256S("000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
-        consensus.nPowTargetTimespan = 2016 * 60; // 1.4 days
+        consensus.nPowTargetTimespan = 100 * 60; // 100 minutes (match mainnet)
         consensus.nPowTargetSpacing = 1 * 60;
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.fPowNoRetargeting = false;
         consensus.nRuleChangeActivationThreshold = 1310; // Approx 65% for testchains
-        consensus.nMinerConfirmationWindow = 2016; // nPowTargetTimespan / nPowTargetSpacing
+        consensus.nMinerConfirmationWindow = 2016; // BIP9 signaling window
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1199145601; // January 1, 2008
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = 1230767999; // December 31, 2008
@@ -524,10 +529,12 @@ public:
         consensus.nBIP66Enabled = true;
         consensus.nSegwitEnabled = true;
         consensus.nCSVEnabled = true;
-        consensus.nSubsidyHalvingInterval = 150;
+        // NOTE: nSubsidyHalvingInterval is not used by GetBlockSubsidy() which has
+        // a hardcoded halving table. This value is kept for API compatibility only.
+        consensus.nSubsidyHalvingInterval = 150; // (unused)
         consensus.powLimit = uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         consensus.kawpowLimit = uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
-        consensus.nPowTargetTimespan = 2016 * 60; // 1.4 days
+        consensus.nPowTargetTimespan = 100 * 60; // 100 minutes (match mainnet)
         consensus.nPowTargetSpacing = 1 * 60;
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.fPowNoRetargeting = true;
