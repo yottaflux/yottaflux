@@ -10,7 +10,7 @@ http://www.yottaflux.ai<br>
 3rd April 2018
 </p>
 <p align="center"><i>
-In the fictional world of Westeros, yottafluxs are used as messengers who carry statements of truth. Yottaflux is a use-case focused blockchain designed to carry statements of truth about who owns what assets.
+Yottaflux is a use-case focused blockchain designed to carry statements of truth about who owns what assets.
 </i></p> 
 
 Thank you to the Bitcoin founder and developers. The Yottaflux project was launched based on the hard work and continuous effort of over 430 Bitcoin developers who made over 14,000 commits by the date of the Yottaflux code fork. We are eternally grateful to you for your diligence in making a secure network and for your support of free and open source software development. The Yottaflux project is built on the foundation you built.
@@ -173,10 +173,6 @@ Some use cases for unique assets include:
 
 ## 8. Messaging Stakeholders
 
-<p align="center"><i>
-"If the Tower of London yottafluxs are lost or fly away, the Crown will fall and Britain with it." -
-Unknown
-</i></p>
 A common problem with tokens/assets is that the token issuer cannot communicate with the token holders. This must be handled very carefully because the token holders do not always wish to be identified. The communication should allow the token holder to opt-out at any time. The message system should only allow select parties to use the message channel so that it is not a spam conduit.
 
 

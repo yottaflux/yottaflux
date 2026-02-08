@@ -73,7 +73,7 @@ A digital peer to peer network for the facilitation of asset transfer.
 
 
 
-In the fictional world of Westeros, yottafluxs are used as messengers who carry statements of truth. Yottaflux is a use case specific blockchain designed to carry statements of truth about who owns what assets. 
+Yottaflux is a use case specific blockchain designed to carry statements of truth about who owns what assets. 
 
 
 

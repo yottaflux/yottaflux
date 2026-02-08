@@ -929,7 +929,7 @@ std::string CopyrightHolders(const std::string &strPrefix)
     // Check for untranslated substitution to make sure Yottaflux copyright is not removed by accident
     if (strprintf(COPYRIGHT_HOLDERS, COPYRIGHT_HOLDERS_SUBSTITUTION).find("Yottaflux") == std::string::npos)
     {
-        strCopyrightHolders += "\n" + strPrefix + "The Raven Core developers";
+        strCopyrightHolders += "\n" + strPrefix + "The Yottaflux Core developers";
     }
     return strCopyrightHolders;
 }
