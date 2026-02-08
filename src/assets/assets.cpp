@@ -5498,7 +5498,7 @@ bool ContextualCheckReissueAsset(CAssetsCache* assetCache, const CReissueAsset& 
     }
 
     // Check the ipfs hash
-    if (reissue_asset.strIPFSHash != "" && reissue_asset.strIPFSHash.size() != 34 && (AreMessagesDeployed() && reissue_asset.strIPFSHash.size() != 32)) {
+    if (reissue_asset.strIPFSHash != "" && reissue_asset.strIPFSHash.size() != 34 && !(AreMessagesDeployed() && reissue_asset.strIPFSHash.size() == 32)) {
         strError = _("Invalid parameter: ipfs_hash must be 34 bytes, Txid must be 32 bytes");
         return false;
     }
@@ -5584,7 +5584,7 @@ bool ContextualCheckReissueAsset(CAssetsCache* assetCache, const CReissueAsset& 
     }
 
     // Check the ipfs hash
-    if (reissue_asset.strIPFSHash != "" && reissue_asset.strIPFSHash.size() != 34 && (AreMessagesDeployed() && reissue_asset.strIPFSHash.size() != 32)) {
+    if (reissue_asset.strIPFSHash != "" && reissue_asset.strIPFSHash.size() != 34 && !(AreMessagesDeployed() && reissue_asset.strIPFSHash.size() == 32)) {
         strError = _("Invalid parameter: ipfs_hash must be 34 bytes, Txid must be 32 bytes");
         return false;
     }
