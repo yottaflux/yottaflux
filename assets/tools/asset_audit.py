@@ -27,9 +27,9 @@ mode = "-main"
 rpc_port = 8558
 
 #mode = "-testnet"
-#rpc_port = 18770
+#rpc_port = 18558
 #mode =  "-regtest"
-#rpc_port = 18560
+#rpc_port = 18561
 
 #Set this information in your yottaflux.conf file (in datadir, not testnet6)
 rpc_user = 'rpcuser'

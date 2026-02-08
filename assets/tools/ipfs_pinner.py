@@ -27,6 +27,9 @@ import signal  #Used for timeout
 JSON_ONLY_CHECK = False
 FILESIZE_THRESHOLD = 100000000
 
+# IPFS gateway URL for fetching content (override with IPFS_GATEWAY env var)
+ipfs_gateway = os.environ.get('IPFS_GATEWAY', 'https://ipfs.io/ipfs/')
+
 #Set this to your yottaflux-cli program
 cli = "yottaflux-cli"
 
@@ -210,7 +213,7 @@ def get_ipfs_file_wget(filename, hash):
 
     print("Downloading: " + hash + " as " + filename)
     try:
-        filedata = urllib2.urlopen('https://ipfs.io/ipfs/' + hash, timeout=20)  
+        filedata = urllib2.urlopen(ipfs_gateway + hash, timeout=20)
         datatowrite = filedata.read()
 
         datatowrite.strip()

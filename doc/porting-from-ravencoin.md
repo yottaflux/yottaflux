@@ -112,7 +112,7 @@ This guide documents every parameter, constant, and behavioral difference betwee
 |---|---|---|---|
 | **Magic bytes** | `0x43524F57` ("CROW") | `0x594F5452` ("YOTR") | |
 | **Default port** | 18444 | 18560 | |
-| **RPC port** | 18443 | 18559 | |
+| **RPC port** | 18443 | 18561 | |
 | **Address prefix (P2PKH)** | 111 | 111 | Same |
 | **Script prefix (P2SH)** | 196 | 196 | Same |
 | **BIP44 coin type** | 1 | 1 | Standard regtest coin type |
@@ -625,9 +625,9 @@ If porting a GUI wallet, update any Ravencoin-branded colors. The Yottaflux Qt w
 
 | Constant | Value | Notes |
 |---|---|---|
-| **PROTOCOL_VERSION** | 70028 | Current protocol version |
+| **PROTOCOL_VERSION** | 70100 | Current protocol version |
 | **MIN_PEER_PROTO_VERSION** | 70025 | Minimum version for peer connections |
-| **GETHEADERS_VERSION** | 70002 | Version that introduced getheaders |
+| **GETHEADERS_VERSION** | 31800 | Version that introduced getheaders |
 | **INIT_PROTO_VERSION** | 209 | Initial protocol version |
 
 Service flags and feature negotiation are the same as Ravencoin.
