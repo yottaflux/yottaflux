@@ -196,10 +196,11 @@ BOOST_FIXTURE_TEST_SUITE(asset_reissue_tests, BasicTestingSetup)
         // Add new asset3 to a valid yai address
         BOOST_CHECK_MESSAGE(cache.AddNewAsset(asset3, GetParams().GlobalBurnAddress(), 0, uint256()), "Failed to add new asset");
 
-        // Create a reissuance of the asset that is valid txid but messaging isn't active in unit tests
+        // Create a reissuance with a txid hash - messaging/restricted assets are deployed (fRip5IsActive=true),
+        // so 32-byte txid data is accepted as valid
         CReissueAsset reissue7("DATAHASH", CAmount(1 * COIN), 8, 1, DecodeAssetData("9c2c8e121a0139ba39bffd3ca97267bca9d4c0c1e84ac0c34a883c28e7a912ca"));
 
-        BOOST_CHECK_MESSAGE(!ContextualCheckReissueAsset(&cache, reissue7, error), "Reissue should have been not valid because messaging isn't active yet, and txid aren't allowed until messaging is active");
+        BOOST_CHECK_MESSAGE(ContextualCheckReissueAsset(&cache, reissue7, error), "Reissue with txid should be valid since messaging is deployed");
     }
 
 

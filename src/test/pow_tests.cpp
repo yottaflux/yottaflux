@@ -48,12 +48,12 @@ BOOST_FIXTURE_TEST_SUITE(pow_tests, BasicTestingSetup)
         BOOST_TEST_MESSAGE("Running Get Next Work Lower Limit Actual Test");
 
         const auto chainParams = CreateChainParams(CBaseChainParams::MAIN);
-        int64_t nLastRetargetTime = 1279008237; // Block #66528
+        int64_t nLastRetargetTime = 1279008237;
         CBlockIndex pindexLast;
         pindexLast.nHeight = 68543;
-        pindexLast.nTime = 1279297671;  // Block #68543
+        pindexLast.nTime = 1279009237;  // Only 1000 seconds later (< nPowTargetTimespan/4 = 1500)
         pindexLast.nBits = 0x1e00ffff;
-        BOOST_CHECK_EQUAL(CalculateNextWorkRequired(&pindexLast, nLastRetargetTime, chainParams->GetConsensus()), (uint64_t)0x1e02648c);
+        BOOST_CHECK_EQUAL(CalculateNextWorkRequired(&pindexLast, nLastRetargetTime, chainParams->GetConsensus()), (uint64_t)0x1d3fffc0);
     }
 
     /* Test the constraint on the upper bound for actual time taken */

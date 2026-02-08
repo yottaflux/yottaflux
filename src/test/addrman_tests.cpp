@@ -214,8 +214,9 @@ BOOST_FIXTURE_TEST_SUITE(addrman_tests, BasicTestingSetup)
         addrman.Add(CAddress(addr7, NODE_NONE), ResolveService("250.1.1.3", 8559));
         addrman.Good(CAddress(addr7, NODE_NONE));
 
-        // Test: 6 addrs + 1 addr from last test = 7.
-        BOOST_CHECK_EQUAL(addrman.size(), (uint64_t)7);
+        // Test: addrs from this test + 1 addr from last test.
+        // With Yottaflux port 8559 hashing, one new-table entry collides, giving 6.
+        BOOST_CHECK_EQUAL(addrman.size(), (uint64_t)6);
 
         // Test: Select pulls from new and tried regardless of port number.
         std::set<uint16_t> ports;
@@ -446,7 +447,7 @@ BOOST_FIXTURE_TEST_SUITE(addrman_tests, BasicTestingSetup)
         uint256 nKey2 = (uint256) (CHashWriter(SER_GETHASH, 0) << 2).GetHash();
 
 
-        BOOST_CHECK_EQUAL(info1.GetTriedBucket(nKey1), 62);
+        BOOST_CHECK_EQUAL(info1.GetTriedBucket(nKey1), 77);
 
         // Test: Make sure key actually randomizes bucket placement. A fail on
         //  this test could be a security issue.
