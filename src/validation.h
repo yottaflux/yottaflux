@@ -555,6 +555,9 @@ extern CAssetSnapshotDB *pAssetSnapshotDb;
 
 extern CDistributeSnapshotRequestDB *pDistributeSnapshotDb;
 
+class CStakingDB;
+extern CStakingDB *pStakingDb;
+
 /** YAI END */
 
 /**

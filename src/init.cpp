@@ -48,6 +48,7 @@
 #include "assets/assets.h"
 #include "assets/assetdb.h"
 #include "assets/snapshotrequestdb.h"
+#include "staking/stakingdb.h"
 #ifdef ENABLE_WALLET
 #include "wallet/init.h"
 #include <wallet/wallet.h>
@@ -317,6 +318,9 @@ void PrepareShutdown()
 
         delete pDistributeSnapshotDb;
         pDistributeSnapshotDb = nullptr;
+
+        delete pStakingDb;
+        pStakingDb = nullptr;
 
         /** YAI END */
     }
@@ -1573,6 +1577,9 @@ bool AppInitMain(boost::thread_group& threadGroup, CScheduler& scheduler)
                     delete pAssetSnapshotDb;
                     delete pDistributeSnapshotDb;
 
+                    // Staking
+                    delete pStakingDb;
+
                     // Basic assets
                     passetsdb = new CAssetsDB(nBlockTreeDBCache, false, fReset);
                     passets = new CAssetsCache();
@@ -1600,6 +1607,9 @@ bool AppInitMain(boost::thread_group& threadGroup, CScheduler& scheduler)
                     pSnapshotRequestDb = new CSnapshotRequestDB(nBlockTreeDBCache, false, false);
                     pAssetSnapshotDb = new CAssetSnapshotDB(nBlockTreeDBCache, false, false);
                     pDistributeSnapshotDb = new CDistributeSnapshotRequestDB(nBlockTreeDBCache, false, false);
+
+                    // Staking
+                    pStakingDb = new CStakingDB(nBlockTreeDBCache, false, false);
 
                     // Read for fAssetIndex to make sure that we only load asset address balances if it if true
                     pblocktree->ReadFlag("assetindex", fAssetIndex);

@@ -216,6 +216,8 @@ static const CRPCConvertParam vRPCConvertParams[] =
     { "purgesnapshot", 1, "block_height"},
     { "stop", 0, "wait"},
     { "getkawpowhash", 3, "height"},
+    { "stakecreate", 0, "amount" },
+    { "stakecreate", 1, "lock_blocks" },
 };
 
 class CRPCConvertTable

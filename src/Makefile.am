@@ -137,6 +137,8 @@ YOTTAFLUX_CORE_H = \
   assets/snapshotrequestdb.h \
   assets/assetsnapshotdb.h \
   assets/rewards.h \
+  staking/staking.h \
+  staking/stakingdb.h \
   base58.h \
   bloom.h \
   blockencodings.h \
@@ -272,6 +274,7 @@ libyottaflux_server_a_SOURCES = \
   assets/snapshotrequestdb.cpp \
   assets/assetsnapshotdb.cpp \
   assets/rewards.cpp \
+  staking/stakingdb.cpp \
   policy/fees.cpp \
   policy/policy.cpp \
   policy/rbf.cpp \
@@ -285,6 +288,7 @@ libyottaflux_server_a_SOURCES = \
   rpc/net.cpp \
   rpc/rawtransaction.cpp \
   rpc/rewards.cpp \
+  rpc/staking.cpp \
   rpc/safemode.cpp \
   rpc/server.cpp \
   script/sigcache.cpp \

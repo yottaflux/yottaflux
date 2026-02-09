@@ -59,6 +59,8 @@
 
 #include "assets/snapshotrequestdb.h"
 #include "assets/assetsnapshotdb.h"
+#include "staking/stakingdb.h"
+#include "staking/staking.h"
 
 // Fixing Boost 1.73 compile errors
 #include <boost/bind/bind.hpp>
@@ -247,6 +249,7 @@ CMyRestrictedDB *pmyrestricteddb = nullptr;
 CSnapshotRequestDB *pSnapshotRequestDb = nullptr;
 CAssetSnapshotDB *pAssetSnapshotDb = nullptr;
 CDistributeSnapshotRequestDB *pDistributeSnapshotDb = nullptr;
+CStakingDB *pStakingDb = nullptr;
 
 CLRUCache<std::string, CNullAssetTxVerifierString> *passetsVerifierCache = nullptr;
 CLRUCache<std::string, int8_t> *passetsQualifierCache = nullptr;
@@ -3253,6 +3256,32 @@ bool static DisconnectTip(CValidationState& state, const CChainParams& chainpara
 
     // Update chainActive and related variables.
     UpdateTip(pindexDelete->pprev, chainparams);
+
+    // Staking index: revert stakes created at this height and undo unlocks
+    if (pStakingDb != nullptr) {
+        // Revert any UNLOCKED -> ACTIVE status changes at this height
+        std::vector<CStakeEntry> unlocking;
+        if (pStakingDb->GetStakesUnlockingAtHeight(pindexDelete->nHeight, unlocking)) {
+            for (const auto& entry : unlocking) {
+                if (entry.status == STAKE_UNLOCKED) {
+                    pStakingDb->UpdateStakeStatus(entry.txid, STAKE_ACTIVE);
+                    LogPrint(BCLog::STAKING, "DisconnectTip: Reverted unlock for txid=%s at height %d\n",
+                        entry.txid.GetHex(), pindexDelete->nHeight);
+                }
+            }
+        }
+
+        // Erase stake entries created at the disconnected block height
+        std::vector<CStakeEntry> created;
+        if (pStakingDb->GetStakesCreatedAtHeight(pindexDelete->nHeight, created)) {
+            for (const auto& entry : created) {
+                pStakingDb->EraseStake(entry.txid);
+                LogPrint(BCLog::STAKING, "DisconnectTip: Erased stake txid=%s from height %d\n",
+                    entry.txid.GetHex(), pindexDelete->nHeight);
+            }
+        }
+    }
+
     // Let wallets know transactions went from 1-confirmed to
     // 0-confirmed or conflicted:
     GetMainSignals().BlockDisconnected(pblock);
@@ -3466,6 +3495,73 @@ bool static ConnectTip(CValidationState& state, const CChainParams& chainparams,
     }
 #endif
     /** YAI END */
+
+    // Staking index: scan block for YFX_STAKE markers and update status
+    if (pStakingDb != nullptr) {
+        // Index new stakes from this block
+        for (size_t txIdx = 0; txIdx < blockConnecting.vtx.size(); ++txIdx) {
+            const CTransactionRef& tx = blockConnecting.vtx[txIdx];
+            for (size_t voutIdx = 0; voutIdx < tx->vout.size(); ++voutIdx) {
+                const CTxOut& out = tx->vout[voutIdx];
+                if (IsStakeMarkerScript(out.scriptPubKey)) {
+                    uint8_t version;
+                    uint32_t marker_unlock_height, marker_lock_duration;
+                    uint160 marker_pubkey_hash;
+                    if (ParseStakeMarker(out.scriptPubKey, version, marker_unlock_height, marker_lock_duration, marker_pubkey_hash)) {
+                        // Find the P2SH output (the one with actual value, not the OP_RETURN)
+                        CAmount stakeAmount = 0;
+                        uint32_t stakeVout = 0;
+                        for (size_t i = 0; i < tx->vout.size(); ++i) {
+                            if (tx->vout[i].nValue > 0 && i != voutIdx) {
+                                // Find the P2SH output that is not change
+                                // The staking output is typically the first non-OP_RETURN output
+                                CTxDestination dest;
+                                if (ExtractDestination(tx->vout[i].scriptPubKey, dest)) {
+                                    const CScriptID *scriptID = boost::get<CScriptID>(&dest);
+                                    if (scriptID != nullptr) {
+                                        stakeAmount = tx->vout[i].nValue;
+                                        stakeVout = i;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (stakeAmount > 0) {
+                            CStakeEntry entry;
+                            entry.txid = tx->GetHash();
+                            entry.vout = stakeVout;
+                            entry.amount = stakeAmount;
+                            entry.create_height = pindexNew->nHeight;
+                            entry.unlock_height = (int)marker_unlock_height;
+                            entry.lock_duration = (int)marker_lock_duration;
+                            entry.pubkey_hash = marker_pubkey_hash;
+                            entry.status = STAKE_ACTIVE;
+
+                            // Encode staker address from pubkey hash
+                            entry.staker_address = EncodeDestination(CKeyID(marker_pubkey_hash));
+
+                            pStakingDb->WriteStake(entry);
+                            LogPrint(BCLog::STAKING, "ConnectTip: Indexed stake txid=%s, amount=%lld, unlock_height=%d\n",
+                                entry.txid.GetHex(), entry.amount, entry.unlock_height);
+                        }
+                    }
+                }
+            }
+        }
+
+        // Update status of stakes unlocking at this height
+        std::vector<CStakeEntry> unlocking;
+        if (pStakingDb->GetStakesUnlockingAtHeight(pindexNew->nHeight, unlocking)) {
+            for (const auto& entry : unlocking) {
+                if (entry.status == STAKE_ACTIVE) {
+                    pStakingDb->UpdateStakeStatus(entry.txid, STAKE_UNLOCKED);
+                    LogPrint(BCLog::STAKING, "ConnectTip: Stake unlocked txid=%s at height %d\n",
+                        entry.txid.GetHex(), pindexNew->nHeight);
+                }
+            }
+        }
+    }
 
     return true;
 }
