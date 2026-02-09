@@ -172,8 +172,6 @@ regtest=1
 server=1
 txindex=1
 listen=1
-
-[regtest]
 port=$p2p_port
 rpcport=$rpc_port
 rpcuser=$RPC_USER
@@ -199,7 +197,7 @@ for i in $(seq 0 $(( NUM_NODES - 1 ))); do
     datadir="$DATADIR_BASE/node${i}"
     rpc_port=$(( BASE_RPC_PORT + 2 * i ))
 
-    "$YOTTAFLUXD" -datadir="$datadir" -regtest &
+    "$YOTTAFLUXD" -datadir="$datadir" -regtest >"$datadir/stdout.log" 2>&1 &
     NODE_PIDS+=($!)
 
     info "  Node $i  PID=${NODE_PIDS[-1]}  P2P=$(( BASE_P2P_PORT + 2 * i ))  RPC=$rpc_port"
