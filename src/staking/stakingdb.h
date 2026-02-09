@@ -32,6 +32,8 @@ public:
     std::string staker_address;
     uint160 pubkey_hash;
     uint8_t status;
+    std::string description;
+    uint256 reward_txid;
 
     CStakeEntry()
     {
@@ -49,6 +51,8 @@ public:
         staker_address = "";
         pubkey_hash.SetNull();
         status = STAKE_ACTIVE;
+        description = "";
+        reward_txid.SetNull();
     }
 
     ADD_SERIALIZE_METHODS;
@@ -65,6 +69,8 @@ public:
         READWRITE(staker_address);
         READWRITE(pubkey_hash);
         READWRITE(status);
+        READWRITE(description);
+        READWRITE(reward_txid);
     }
 };
 
@@ -88,6 +94,12 @@ public:
 
     /** Update status of an existing stake */
     bool UpdateStakeStatus(const uint256& txid, uint8_t newStatus);
+
+    /** Set the reward_txid on an existing stake entry */
+    bool UpdateStakeReward(const uint256& txid, const uint256& reward_txid);
+
+    /** Clear the reward_txid on an existing stake entry (set to null) */
+    bool ClearStakeReward(const uint256& txid);
 
     /** Get all stakes, optionally filtered by status (-1 = all) */
     bool GetAllStakes(std::vector<CStakeEntry>& entries, int filterStatus = -1);

@@ -218,6 +218,9 @@ static const CRPCConvertParam vRPCConvertParams[] =
     { "getkawpowhash", 3, "height"},
     { "stakecreate", 0, "amount" },
     { "stakecreate", 1, "lock_blocks" },
+    { "stakereward", 1, "amount" },
+    { "getstakesatheight", 0, "height" },
+    { "getunlocksatheight", 0, "height" },
 };
 
 class CRPCConvertTable

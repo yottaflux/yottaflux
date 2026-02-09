@@ -3280,6 +3280,22 @@ bool static DisconnectTip(CValidationState& state, const CChainParams& chainpara
                     entry.txid.GetHex(), pindexDelete->nHeight);
             }
         }
+
+        // Clear reward_txid for any YFX_REWARD markers in the disconnected block
+        for (size_t txIdx = 1; txIdx < pblock->vtx.size(); ++txIdx) { // skip coinbase
+            const CTransactionRef& tx = pblock->vtx[txIdx];
+            for (size_t voutIdx = 0; voutIdx < tx->vout.size(); ++voutIdx) {
+                if (IsRewardMarkerScript(tx->vout[voutIdx].scriptPubKey)) {
+                    uint8_t reward_version;
+                    uint256 stake_txid;
+                    if (ParseRewardMarker(tx->vout[voutIdx].scriptPubKey, reward_version, stake_txid)) {
+                        pStakingDb->ClearStakeReward(stake_txid);
+                        LogPrint(BCLog::STAKING, "DisconnectTip: Cleared reward_txid for stake_txid=%s\n",
+                            stake_txid.GetHex());
+                    }
+                }
+            }
+        }
     }
 
     // Let wallets know transactions went from 1-confirmed to
@@ -3434,6 +3450,49 @@ bool static ConnectTip(CValidationState& state, const CChainParams& chainparams,
         LogPrint(BCLog::BENCH, "  - Compute Asset Tasks total: %.2fms [%.2fs (%.2fms/blk)]\n", (nTimeAssetsEnd - nTimeAssetsStart) * MILLI, nTimeAssetsEnd * MICRO, nTimeAssetsEnd * MILLI / nBlocksTotal);
         /** YAI END */
 
+        // Reward marker scanning: reconstruct reward_txid from on-chain YFX_REWARD markers
+        // Must happen before view.Flush() so pcoinsTip->AccessCoin() can look up unspent inputs
+        std::string rewardAuthority = gArgs.GetArg("-rewardauthority", "");
+        if (pStakingDb != nullptr && !rewardAuthority.empty()) {
+            for (size_t txIdx = 1; txIdx < blockConnecting.vtx.size(); ++txIdx) { // skip coinbase
+                const CTransactionRef& tx = blockConnecting.vtx[txIdx];
+                for (size_t voutIdx = 0; voutIdx < tx->vout.size(); ++voutIdx) {
+                    if (IsRewardMarkerScript(tx->vout[voutIdx].scriptPubKey)) {
+                        uint8_t reward_version;
+                        uint256 stake_txid;
+                        if (!ParseRewardMarker(tx->vout[voutIdx].scriptPubKey, reward_version, stake_txid))
+                            continue;
+
+                        // Provenance check: verify at least one input is funded by the reward authority
+                        bool provenanceOk = false;
+                        for (const auto& txin : tx->vin) {
+                            const Coin& coin = pcoinsTip->AccessCoin(txin.prevout);
+                            if (coin.IsSpent())
+                                continue;
+                            CTxDestination dest;
+                            if (ExtractDestination(coin.out.scriptPubKey, dest)) {
+                                if (EncodeDestination(dest) == rewardAuthority) {
+                                    provenanceOk = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (!provenanceOk)
+                            continue;
+
+                        // Update the stake entry's reward_txid if it's currently null
+                        CStakeEntry stakeEntry;
+                        if (pStakingDb->ReadStake(stake_txid, stakeEntry) && stakeEntry.reward_txid.IsNull()) {
+                            pStakingDb->UpdateStakeReward(stake_txid, tx->GetHash());
+                            LogPrint(BCLog::STAKING, "ConnectTip: Reconstructed reward_txid=%s for stake_txid=%s\n",
+                                tx->GetHash().GetHex(), stake_txid.GetHex());
+                        }
+                    }
+                }
+            }
+        }
+
         nTime3 = GetTimeMicros(); nTimeConnectTotal += nTime3 - nTime2;
         LogPrint(BCLog::BENCH, "  - Connect total: %.2fms [%.2fs (%.2fms/blk)]\n", (nTime3 - nTime2) * MILLI, nTimeConnectTotal * MICRO, nTimeConnectTotal * MILLI / nBlocksTotal);
         bool flushed = view.Flush();
@@ -3507,7 +3566,8 @@ bool static ConnectTip(CValidationState& state, const CChainParams& chainparams,
                     uint8_t version;
                     uint32_t marker_unlock_height, marker_lock_duration;
                     uint160 marker_pubkey_hash;
-                    if (ParseStakeMarker(out.scriptPubKey, version, marker_unlock_height, marker_lock_duration, marker_pubkey_hash)) {
+                    std::string marker_description;
+                    if (ParseStakeMarker(out.scriptPubKey, version, marker_unlock_height, marker_lock_duration, marker_pubkey_hash, marker_description)) {
                         // Find the P2SH output (the one with actual value, not the OP_RETURN)
                         CAmount stakeAmount = 0;
                         uint32_t stakeVout = 0;
@@ -3537,6 +3597,7 @@ bool static ConnectTip(CValidationState& state, const CChainParams& chainparams,
                             entry.lock_duration = (int)marker_lock_duration;
                             entry.pubkey_hash = marker_pubkey_hash;
                             entry.status = STAKE_ACTIVE;
+                            entry.description = marker_description;
 
                             // Encode staker address from pubkey hash
                             entry.staker_address = EncodeDestination(CKeyID(marker_pubkey_hash));

@@ -69,6 +69,32 @@ bool CStakingDB::UpdateStakeStatus(const uint256& txid, uint8_t newStatus)
     return Write(std::make_pair(STAKE_FLAG, txid), entry);
 }
 
+bool CStakingDB::UpdateStakeReward(const uint256& txid, const uint256& reward_txid)
+{
+    CStakeEntry entry;
+    if (!ReadStake(txid, entry))
+        return false;
+
+    LogPrint(BCLog::STAKING, "%s : Setting reward_txid on stake: txid=%s, reward_txid=%s\n",
+        __func__, txid.GetHex(), reward_txid.GetHex());
+
+    entry.reward_txid = reward_txid;
+    return Write(std::make_pair(STAKE_FLAG, txid), entry);
+}
+
+bool CStakingDB::ClearStakeReward(const uint256& txid)
+{
+    CStakeEntry entry;
+    if (!ReadStake(txid, entry))
+        return false;
+
+    LogPrint(BCLog::STAKING, "%s : Clearing reward_txid on stake: txid=%s\n",
+        __func__, txid.GetHex());
+
+    entry.reward_txid.SetNull();
+    return Write(std::make_pair(STAKE_FLAG, txid), entry);
+}
+
 bool CStakingDB::GetAllStakes(std::vector<CStakeEntry>& entries, int filterStatus)
 {
     entries.clear();
