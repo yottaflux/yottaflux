@@ -247,14 +247,14 @@ bool CScript::IsAssetScript(int& nType, bool& fIsOwner, int& nStartingIndex) con
     if (this->size() > 31) {
         if ((*this)[25] == OP_YAI_ASSET) { // OP_YAI_ASSET is always in the 25 index of the script if it exists
             int index = -1;
-            if ((*this)[27] == YAI_R) { // Check to see if YAI starts at 27 ( this->size() < 105)
-                if ((*this)[28] == YAI_V)
-                    if ((*this)[29] == YAI_N)
+            if ((*this)[27] == YAI_Y) { // Check to see if YAI starts at 27 ( this->size() < 105)
+                if ((*this)[28] == YAI_A)
+                    if ((*this)[29] == YAI_I)
                         index = 30;
             } else {
-                if ((*this)[28] == YAI_R) // Check to see if YAI starts at 28 ( this->size() >= 105)
-                    if ((*this)[29] == YAI_V)
-                        if ((*this)[30] == YAI_N)
+                if ((*this)[28] == YAI_Y) // Check to see if YAI starts at 28 ( this->size() >= 105)
+                    if ((*this)[29] == YAI_A)
+                        if ((*this)[30] == YAI_I)
                             index = 31;
             }
 

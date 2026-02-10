@@ -523,9 +523,9 @@ void CNewAsset::ConstructTransaction(CScript& script) const
     ssAsset << *this;
 
     std::vector<unsigned char> vchMessage;
-    vchMessage.push_back(YAI_R); // r
-    vchMessage.push_back(YAI_V); // v
-    vchMessage.push_back(YAI_N); // n
+    vchMessage.push_back(YAI_Y); // y
+    vchMessage.push_back(YAI_A); // a
+    vchMessage.push_back(YAI_I); // i
     vchMessage.push_back(YAI_Q); // q
 
     vchMessage.insert(vchMessage.end(), ssAsset.begin(), ssAsset.end());
@@ -538,9 +538,9 @@ void CNewAsset::ConstructOwnerTransaction(CScript& script) const
     ssOwner << std::string(this->strName + OWNER_TAG);
 
     std::vector<unsigned char> vchMessage;
-    vchMessage.push_back(YAI_R); // r
-    vchMessage.push_back(YAI_V); // v
-    vchMessage.push_back(YAI_N); // n
+    vchMessage.push_back(YAI_Y); // y
+    vchMessage.push_back(YAI_A); // a
+    vchMessage.push_back(YAI_I); // i
     vchMessage.push_back(YAI_O); // o
 
     vchMessage.insert(vchMessage.end(), ssOwner.begin(), ssOwner.end());
@@ -1620,9 +1620,9 @@ void CAssetTransfer::ConstructTransaction(CScript& script) const
     ssTransfer << *this;
 
     std::vector<unsigned char> vchMessage;
-    vchMessage.push_back(YAI_R); // r
-    vchMessage.push_back(YAI_V); // v
-    vchMessage.push_back(YAI_N); // n
+    vchMessage.push_back(YAI_Y); // y
+    vchMessage.push_back(YAI_A); // a
+    vchMessage.push_back(YAI_I); // i
     vchMessage.push_back(YAI_T); // t
 
     vchMessage.insert(vchMessage.end(), ssTransfer.begin(), ssTransfer.end());
@@ -1646,10 +1646,10 @@ void CReissueAsset::ConstructTransaction(CScript& script) const
     ssReissue << *this;
 
     std::vector<unsigned char> vchMessage;
-    vchMessage.push_back(YAI_R); // r
-    vchMessage.push_back(YAI_V); // v
-    vchMessage.push_back(YAI_N); // n
-    vchMessage.push_back(YAI_R); // r
+    vchMessage.push_back(YAI_Y); // y
+    vchMessage.push_back(YAI_A); // a
+    vchMessage.push_back(YAI_I); // i
+    vchMessage.push_back(YAI_R); // r (reissue)
 
     vchMessage.insert(vchMessage.end(), ssReissue.begin(), ssReissue.end());
     script << OP_YAI_ASSET << ToByteVector(vchMessage) << OP_DROP;

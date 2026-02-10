@@ -16,13 +16,14 @@
 #include <unordered_map>
 #include <list>
 
-// Asset serialization magic bytes (consensus-critical, inherited from Ravencoin)
-// These values spell "rvnqto" in ASCII - DO NOT CHANGE without a hard fork
-#define YAI_R 114
-#define YAI_V 118
-#define YAI_N 110
+// Asset serialization magic bytes (consensus-critical)
+// Prefix bytes spell "yai" in ASCII, operation types are "qto" + reissue 'r'
+#define YAI_Y 121
+#define YAI_A 97
+#define YAI_I 105
 #define YAI_Q 113
 #define YAI_T 116
+#define YAI_R 114
 #define YAI_O 111
 
 #define DEFAULT_UNITS 0
